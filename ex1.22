@@ -1,0 +1,45 @@
+#lang racket
+(require rackunit)
+
+(define (timed-prime-test n)
+  (start-prime-test n (current-inexact-milliseconds)))
+
+(define (start-prime-test n start-time)
+  (cond ((prime? n) 
+         (report-prime n (- (current-inexact-milliseconds) start-time)))))
+
+(define (report-prime n elapsed-time)
+  (newline)
+  (display n)
+  (display " *** ")
+  (display elapsed-time))
+
+(define (prime? n)
+  (= n (smallest-divisor n)))  
+
+(define (smallest-divisor n)
+  (find-divisor n 2))
+
+(define (find-divisor n test-divisor)
+  (cond ((> (sqr test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
+
+(define (divides? a b)
+  (= (remainder b a) 0))
+
+(define (search-for-primes min max)
+  (cond ((even? min) (search-for-primes (+ min 1) max))
+        (else
+         (cond ((<= min max) 
+                (timed-prime-test min)
+                (search-for-primes (+ min 2) max))))))
+
+(define (next n)
+  (if (even? n) (+ n 1) (+ n 2)))
+
+(search-for-primes 1000 1019)
+(search-for-primes 10000 10037)
+(search-for-primes 100000 100043)
+(search-for-primes 1000000 1000037)
+(search-for-primes 10000000000 10000000100)

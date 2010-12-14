@@ -1,0 +1,32 @@
+#lang racket
+
+(define zero 
+  (lambda (f) 
+    (lambda (x) 
+      x)))
+
+(define one
+  ; (lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x)))))
+  ; (lambda x.t)s => t[x := s]
+  ; (lambda (f) (lambda (x) (f ((lambda (x) x) x)))))
+  (lambda (f) (lambda (x) (f x))))
+
+(define two
+; (lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) (f x)))) f) x)))))
+; (lambda (f) (lambda (x) (f ((lambda (x) (f x)) x)))))
+  (lambda (f) (lambda (x) (f (f x)))))
+
+(define (add-1 n)
+  (lambda (f) (lambda (x) (f ((n f) x)))))
+
+(define (add m n)
+  (lambda (f) (lambda (x) ((m f) ((n f) x)))))
+
+;test
+(define (inc x) (+ x 1))
+(= 0 ((zero inc) 0))
+(= 1 ((one inc) 0))
+(= 2 ((two inc) 0))
+(= 3 (((add one two) inc) 0))
+(= 4 (((add two two) inc) 0))
+(= 2 (((add two zero) inc) 0))

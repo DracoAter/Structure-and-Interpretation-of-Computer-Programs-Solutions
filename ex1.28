@@ -1,0 +1,38 @@
+#lang scheme
+(require rackunit)
+
+(define (miller-rabin-prime? n times)
+  (cond ((= times 0) true)
+        ((miller-rabin-test n) (miller-rabin-prime? n (- times 1)))
+        (else false)))
+
+(define (miller-rabin-test n)
+  (define (try-it a)
+    (= (expmod a (- n 1) n) 1))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((and (!= base 1) 
+              (!= base (- m 1)) 
+              (= (remainder( sqr base) m) 1)) 0)
+        ((even? exp) 
+         (remainder (sqr (expmod base (/ exp 2) m)) m))
+        (else (remainder (* base (expmod base (- exp 1) m)) m))))
+
+(define (!= x y)
+  (not (= x y)))
+
+
+(miller-rabin-prime? 5 5)
+(miller-rabin-prime? 7 5)
+(miller-rabin-prime? 11 5)
+(miller-rabin-prime? 21 5)
+(miller-rabin-prime? 15 5)
+(miller-rabin-prime? 12 5)
+(miller-rabin-prime? 561 5)
+(miller-rabin-prime? 1105 5)
+(miller-rabin-prime? 1729 5)
+(miller-rabin-prime? 2465 5)
+(miller-rabin-prime? 2821 5)
+(miller-rabin-prime? 6601 5)

@@ -1,0 +1,7 @@
+#lang racket
+
+;(c - cp0.01, c + cp0.01)
+;(a - ap0.01) * (b - bq0.01) = ab - abq0.01 - abp0.01 + apbq0.0001
+;(ab - abq0.01 - abp0.01 + apbq0.0001, ab + abq0.01 + abp0.01 + apbq0.0001)
+;(ab*(pq0.0001 - q0.01 - p0.01), ab*(pq0.0001 + q0.01 + p0.01))
+;

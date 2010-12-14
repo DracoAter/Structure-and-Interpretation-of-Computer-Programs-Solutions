@@ -1,0 +1,20 @@
+#lang racket
+
+(define (cont-frac n d k)
+  (define (iter n d k result)
+  (if (= k 0)
+      result
+      (iter n d (- k 1) (/ (n k) (+ (d k) result)))))
+  
+  (iter n d k 0))
+
+
+(define (tan x n)    
+  (cont-frac (lambda (k) (- 0 (if (= k 1) x (sqr x)))) 
+             (lambda (k) (- (* 2 k) 1)) 
+             n))
+
+
+(tan (/ 3.14159265358 4) 10)
+(tan 3.14159265358 10)
+(tan (/ 3.14159265358 2) 10)

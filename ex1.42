@@ -1,0 +1,9 @@
+#lang racket
+
+(define (compose f g)
+  (lambda (x) (f (g x))))
+
+(define (inc x) (+ x 1))
+
+;test
+(= 49 ((compose sqr inc) 6)) 

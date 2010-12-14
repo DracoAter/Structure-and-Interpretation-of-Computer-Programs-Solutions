@@ -1,0 +1,61 @@
+#lang racket
+
+(define (perimeter-rect rectangle)
+  (* (+ (length-segment (a-rect rectangle))
+        (length-segment (b-rect rectangle))) 2))
+
+(define (area-rect rectangle)
+  (* (length-segment (a-rect rectangle))
+     (length-segment (b-rect rectangle))))
+
+(define (make-rect a-segment b-segment)
+  (cons a-segment b-segment))
+
+(define (a-rect rectangle)
+  (car rectangle))
+
+(define (b-rect rectangle)
+  (cdr rectangle))
+
+(define (length-segment segment)
+  (let ((start (start-segment segment))
+        (end (end-segment segment)))
+    (sqrt (+ (sqr (- (x-point start) (x-point end)))
+             (sqr (- (y-point start) (y-point end)))))))
+
+(define (make-segment start-point end-point)
+  (cons start-point end-point))
+
+(define (start-segment segment)
+  (car segment))
+
+(define (end-segment segment)
+  (cdr segment))
+
+(define (make-point x y)
+  (cons x y))
+
+(define (x-point point)
+  (car point))
+
+(define (y-point point)
+  (cdr point))
+
+
+;test
+(define a (make-point 2 3))
+(define b (make-point 5 0))
+(define c (make-point 4 -1))
+
+(define ab (make-segment (- (x-point b) (x-point a)) 
+                         (- (y-point b) (y-point a))))
+(define bc (make-segment (- (x-point c) (x-point b)) 
+                         (- (y-point c) (y-point b))))
+
+(= 0 (+ (* (x-point ab) (y-point bc))
+        (* (y-point ab) (x-point bc))));ab |_ bc
+
+(define r (make-rect (make-segment a b) (make-segment b c)))
+
+(perimeter-rect r)
+(area-rect r)

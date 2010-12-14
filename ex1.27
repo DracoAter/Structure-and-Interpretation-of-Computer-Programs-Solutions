@@ -1,0 +1,28 @@
+#lang scheme
+(require rackunit)
+
+(define (carmichael-number? n)
+  (fast-prime? n 2))
+  
+(define (fast-prime? n current)
+  (cond ((= current n) true)
+        ((fermat-test n current) (fast-prime? n (+ current 1)))
+        (else false)))
+
+(define (fermat-test n current)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it current))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp) (remainder (sqr (expmod base (/ exp 2) m)) m))
+        (else (remainder (* base (expmod base (- exp 1) m)) m))))
+
+
+(carmichael-number? 561)
+(carmichael-number? 1105)
+(carmichael-number? 1729)
+(carmichael-number? 2465)
+(carmichael-number? 2821)
+(carmichael-number? 6601)

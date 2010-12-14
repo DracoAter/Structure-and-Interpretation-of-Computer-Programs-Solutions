@@ -1,0 +1,22 @@
+#lang racket
+
+(define (deep-reverse lst)
+  (define (iter current next)
+    (if (null? next)
+        current
+        (iter (cons (if (pair? (car next))
+                        (deep-reverse (car next))
+                        (car next)) current) (cdr next))))
+  (iter null lst))
+
+(define (reverse lst)
+  (define (iter current next)
+    (if (null? next)
+        current
+        (iter (cons (car next) current) (cdr next))))
+  (iter null lst))
+
+;test
+(define x (list (list 1 2) (list 3 4)))
+(reverse x)
+(deep-reverse x)

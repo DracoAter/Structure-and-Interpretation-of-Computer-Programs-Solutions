@@ -1,0 +1,21 @@
+#lang racket
+
+(define (smooth f)
+  (let ((dx 0.0000001))
+    (lambda (x) (/ (+ (f x) (f (+ x dx)) (f (- x dx))) 3))))
+
+(define (smooth-n f n)
+  (let ((dx 0.0000001))
+    ((repeated smooth n) f)))
+
+(define (repeated f n)
+  (define (iter f n result)
+    (if (= n 0)
+        result
+        (iter f (- n 1) (f result))))
+  
+  (lambda (x) (iter f n x)))
+
+((smooth sqr) 2)
+(((repeated smooth 3) sqr) 2)
+((smooth-n sqr 3) 2)

@@ -1,0 +1,19 @@
+#lang racket
+
+(define (cons x y)
+  (lambda (m) (m x y)))
+
+(define (car z)
+  (z (lambda (p q) p)))
+
+(define (cdr z)
+  (z (lambda (p q) q)))
+
+
+;test
+(define x 2)
+(define y 3)
+
+(= x (car (cons x y)))
+(= y (cdr (cons x y)))
+

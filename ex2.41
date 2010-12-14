@@ -1,0 +1,34 @@
+#lang racket
+
+(define (sum-thries n s)
+  (define (sum-is-s? lst)
+    (= s (sum lst)))
+  
+  (filter sum-is-s? (unique-thries n)))
+
+(define (sum lst)
+  (if (null? lst)
+      0
+      (+ (car lst)
+         (sum (cdr lst)))))
+  
+(define (unique-thries number)
+  (if (< number 3)
+      null
+      (append (unique-thries (- number 1))
+              (map (lambda (x) (append x (list number)))
+                   (unique-pairs (- number 1))))))
+
+(define (unique-pairs number)
+  (if (= 1 number)
+      null
+      (append (unique-pairs (- number 1))
+              (map (lambda (x) (list x number)) 
+                   (enumerate-interval 1 (- number 1))))))
+
+(define (enumerate-interval low high)
+  (if (> low high)
+      null
+      (cons low (enumerate-interval (+ low 1) high))))
+
+(sum-thries 7 11)

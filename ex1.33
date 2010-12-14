@@ -1,0 +1,52 @@
+#lang racket
+
+(define (accumulate combiner null-value term filter? a next b )
+  (define (iter a result)
+    (if (> a b) 
+        result
+        (iter (next a) 
+              (combiner result 
+                        (if (filter? a) 
+                            (term a)
+                            null-value)))))
+  
+  (iter a null-value))
+
+
+(define (prime? n)
+  (fast-prime? n 2))
+  
+(define (fast-prime? n current)
+  (cond ((= current n) true)
+        ((miller-rabin-test n current) (fast-prime? n (+ current 1)))
+        (else false)))
+
+(define (miller-rabin-test n current)
+  (define (try-it a)
+    (= (expmod a (- n 1) n) 1))
+  (try-it current))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp) (remainder (sqr (expmod base (/ exp 2) m)) m))
+        (else (remainder (* base (expmod base (- exp 1) m)) m))))
+
+(define (inc x) (+ x 1))
+(define (self x) x)
+
+(define (mutual-primes? a b)
+  (= 1 (gcd a b)))
+
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+
+(define (product-of-mutual-primes-of-n n)
+  (define (mutual-primes-with-n? a)
+    (= 1 (gcd a n)))
+  
+  (accumulate * 1 self mutual-primes-with-n? 1 inc n))
+
+(= (accumulate + 0 sqr prime? 2 inc 11) 208)
+(= (product-of-mutual-primes-of-n 15) 896896)  

@@ -1,0 +1,39 @@
+#lang racket
+
+(define (midpoint-segment segment)
+  (let ((start (start-segment segment))
+        (end (end-segment segment)))
+    (make-point (average (x-point start) (x-point end))
+                (average (y-point start) (y-point end)))))
+
+(define (average a b)
+  (/ (+ a b) 2.0))
+
+(define (make-segment start-point end-point)
+  (cons start-point end-point))
+
+(define (start-segment segment)
+  (car segment))
+
+(define (end-segment segment)
+  (cdr segment))
+
+(define (make-point x y)
+  (cons x y))
+
+(define (x-point point)
+  (car point))
+
+(define (y-point point)
+  (cdr point))
+
+;test
+(define a (make-point 2 3))
+(define b (make-point -1 2))
+(define c (make-point -4 -4))
+(define d (make-point 4 -5))
+
+(midpoint-segment (make-segment a b))
+(midpoint-segment (make-segment b c))
+(midpoint-segment (make-segment c d))
+(midpoint-segment (make-segment d a))

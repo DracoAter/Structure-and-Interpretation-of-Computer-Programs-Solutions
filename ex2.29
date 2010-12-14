@@ -1,0 +1,79 @@
+#lang racket
+
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (car (cdr mobile)))
+
+(define (branch-length branch)
+  (car branch))
+
+(define (branch-structure branch)
+  (car (cdr branch)))
+
+(define (total-weight mobile)
+  (if (pair? mobile)
+      (let ((left-structure (branch-structure 
+                             (left-branch mobile)))
+            (right-structure (branch-structure 
+                              (right-branch mobile))))
+        (+ (if (pair? left-structure)
+               (total-weight left-structure)
+               left-structure)
+           (if (pair? right-structure)
+               (total-weight right-structure)
+               right-structure)))
+      mobile))
+
+(define (balanced? mobile)
+  (let ((left (left-branch mobile))
+        (right (right-branch mobile)))
+    (and (if (pair? (branch-structure left))
+             (balanced? (branch-structure left))
+             true)
+         (if (pair? (branch-structure right))
+             (balanced? (branch-structure right))
+             true)
+         (= (* (branch-length left) 
+               (total-weight (branch-structure left)))
+            (* (branch-length right)
+               (total-weight (branch-structure right)))))))
+
+(define (make-mobile left right)
+  (list left right))
+
+(define (make-branch length structure)
+  (list length structure))
+
+
+;test
+(define a (make-branch 3 4))
+(define b (make-branch 4 5))
+(define c (make-branch 5 6))
+(define d (make-branch 7 9))
+(define e (make-branch 6 5))
+
+(define ab (make-mobile a b))
+(define cd (make-mobile c d))
+(define ce (make-mobile c e))
+
+(define abcd (make-mobile (make-branch 4 ab)
+                          (make-branch 3 cd)))
+
+(left-branch ab);a
+(left-branch cd);c
+(right-branch ab);b
+(right-branch cd);d
+
+(branch-length a);3
+(branch-length b);4
+(branch-structure c);6
+(branch-structure d);9
+
+(left-branch abcd);(4 ab)
+(total-weight ab);9
+(total-weight abcd);4 + 5 + 6 + 9 = 24
+(balanced? ab);#f
+(balanced? abcd);#f
+(balanced? ce);#t

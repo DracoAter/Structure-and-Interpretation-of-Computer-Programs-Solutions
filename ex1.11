@@ -1,0 +1,23 @@
+#lang scheme
+(require rackunit)
+
+(define (3fib n)
+  (cond ((< n 3) n)
+        (else (+ (3fib (- n 1)) (3fib (- n 2)) (3fib (- n 3)))))) 
+
+
+(define (3ifib n)
+  (3fib-iter 2 1 0 n))
+
+(define (3fib-iter a b c count)
+  (if (= count 0)
+      c
+      (3fib-iter (+ a b c) a b (- count 1))))
+
+(check-= (3ifib 0) (3fib 0) 0)
+(check-= (3ifib 1) (3fib 1) 0)
+(check-= (3ifib 2) (3fib 2) 0)
+(check-= (3ifib 3) (3fib 3) 0)
+(check-= (3ifib 4) (3fib 4) 0)
+(check-= (3ifib 5) (3fib 5) 0)
+(check-= (3ifib 6) (3fib 6) 0)

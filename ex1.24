@@ -1,0 +1,46 @@
+#lang scheme
+(require rackunit)
+
+(define (timed-prime-test n)
+  (start-prime-test n (current-inexact-milliseconds)))
+
+(define (fast-prime? n times)
+  (cond ((= times 0) true)
+        ((fermat-test n) (fast-prime? n (- times 1)))
+        (else false)))
+
+(define (fermat-test n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp) (remainder (sqr (expmod base (/ exp 2) m)) m))
+        (else (remainder (* base (expmod base (- exp 1) m)) m))))
+
+(define (start-prime-test n start-time)
+  (if (fast-prime? n 1)
+      (report-prime n (- (current-inexact-milliseconds) start-time))
+      0))
+
+(define (report-prime n elapsed-time)
+  (newline)
+  (display n)
+  (display " *** ")
+  (display elapsed-time))
+
+(define (search-for-primes min max)
+  (cond ((even? min) (search-for-primes (+ min 1) max))
+        (else
+         (cond ((<= min max) 
+                (timed-prime-test min)
+                (search-for-primes (+ min 2) max))))))
+
+(define (next n)
+  (if (even? n) (+ n 1) (+ n 2)))
+
+(search-for-primes 1000 1019)
+(search-for-primes 10000 10037)
+(search-for-primes 100000 100043)
+(search-for-primes 1000000 1000037)

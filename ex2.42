@@ -1,0 +1,55 @@
+#lang racket
+
+(define (queens board-size)
+  (define (queen-cols k)
+    (if (= k 0)
+        (list empty-board)
+        (filter
+         (lambda (positions) (safe? k positions))
+         (flatmap
+          (lambda (rest-of-queens)
+            (map (lambda (new-row)
+                   (adjoin-position new-row k rest-of-queens))
+                 (enumerate-interval 1 board-size)))
+          (queen-cols (- k 1))))))
+  (queen-cols board-size))
+
+(define empty-board '())
+
+(define (safe? k positions)
+  (let ((reversed-positions (reverse positions))
+        (last (car (reverse positions))))
+  (and (horizontal-safe? last (cdr reversed-positions))
+       (diagonal-up-safe? last (cdr reversed-positions))
+       (diagonal-down-safe? last (cdr reversed-positions)))))
+
+(define (horizontal-safe? k positions)
+  (if (null? positions)
+      true
+      (and (not (= (car positions) k))
+           (horizontal-safe? k (cdr positions)))))
+
+(define (diagonal-up-safe? k reversed-positions)
+  (if (null? reversed-positions)
+      true
+      (and (not(= (car reversed-positions) (+ k 1)))
+           (diagonal-up-safe? (+ k 1) (cdr reversed-positions)))))
+
+(define (diagonal-down-safe? k reversed-positions)
+  (if (null? reversed-positions)
+      true
+      (and (not(= (car reversed-positions) (- k 1)))
+           (diagonal-down-safe? (- k 1) (cdr reversed-positions)))))
+
+(define (flatmap proc lst)
+  (foldr append '() (map proc lst)))
+
+(define (enumerate-interval low high)
+  (if (> low high)
+      '()
+      (append (list low) (enumerate-interval (+ low 1) high))))
+
+(define (adjoin-position new-row k rest-of-queens)
+  (append rest-of-queens (list new-row)))
+
+(queens 6)

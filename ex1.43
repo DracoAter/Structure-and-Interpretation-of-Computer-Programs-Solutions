@@ -1,0 +1,13 @@
+#lang racket
+
+(define (repeated f n)
+  (define (iter f n result)
+    (if (= n 0)
+        result
+        (iter f (- n 1) (f result))))
+  
+  (lambda (x) (iter f n x)))
+        
+
+((repeated sqr 2) 5)
+((repeated sqrt 3) 256)

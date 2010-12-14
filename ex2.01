@@ -1,0 +1,21 @@
+#lang racket
+
+(define (make-rat n d)
+  (if (< d 0)
+      (make-rat (- n) (- d))
+      (let ((g (gcd n d)))
+        (cons (/ n g) (/ d g)))))
+
+(define (numer x) (car x))
+(define (denom x) (cdr x))
+
+(define (mul-rat x y)
+  (make-rat (* (numer x) (numer y))
+            (* (denom x) (denom y))))
+
+;test
+(mul-rat (make-rat 3 4) (make-rat 5 15))
+(mul-rat (make-rat 2 -4) (make-rat 5 15))
+(mul-rat (make-rat 3 4) (make-rat -5 10))
+(mul-rat (make-rat -3 4) (make-rat 3 -10))
+(mul-rat (make-rat -3 4) (make-rat -3 -10))

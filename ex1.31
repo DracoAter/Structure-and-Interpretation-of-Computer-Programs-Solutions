@@ -1,0 +1,65 @@
+#lang racket
+(require rackunit)
+
+
+;recursive
+(define (product term a next b)
+  (if (> a b)
+      1
+      (* (term a)
+         (product term (next a) next b))))
+
+;iterative
+(define (product term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (* result (term a)))))
+         
+  (iter a 1))
+
+
+(define (inc x) (+ x 1))
+
+(define (factorial n)
+  (define (self x) x)
+  
+  (if (= n 0)
+      1
+      (product self 1 inc n)))
+
+
+(define (wallis-pi n)
+  (define (wallis-term n)
+    (/ (* 4 n (+ n 1)) (sqr (+ 1 (* 2 n)))))
+  
+  (product wallis-term 1 inc n))
+    
+
+(check-= (factorial 0) 1 0)
+(check-= (factorial 1) 1 0)
+(check-= (factorial 2) 2 0)
+(check-= (factorial 3) 6 0)
+(check-= (factorial 4) 24 0)
+(check-= (factorial 5) 120 0)
+(check-= (factorial 6) 720 0)
+(check-= (factorial 10) 3628800 0)
+
+(check-= (wallis-pi 1) 8/9 0)
+(check-= (wallis-pi 2) 192/225 0)
+(check-= (wallis-pi 3) 9216/11025 0)
+(check-= (wallis-pi 4) 737280/893025 0)
+(check-= (wallis-pi 5) 88473600/108056025 0)
+(check-= (wallis-pi 6) 14863564800/18261468225 0)
+
+(- 3.1415926 (* 4 (wallis-pi 1)))
+(- 3.1415926 (* 4 (wallis-pi 2)))
+(- 3.1415926 (* 4 (wallis-pi 3)))
+(- 3.1415926 (* 4 (wallis-pi 4)))
+(- 3.1415926 (* 4 (wallis-pi 5)))
+(- 3.1415926 (* 4 (wallis-pi 6)))
+(- 3.1415926 (* 4 (wallis-pi 7)))
+(- 3.1415926 (* 4 (wallis-pi 8)))
+(- 3.1415926 (* 4 (wallis-pi 9)))
+(- 3.1415926 (* 4 (wallis-pi 10)))
+(- 3.1415926 (* 4 (wallis-pi 11)))

@@ -1,0 +1,13 @@
+#lang scheme
+
+(define (my-prod b n) 
+  (my-prod-iter b n 0))
+
+(define (my-prod-iter b n a)
+  (cond ((= n 0) a)
+        ((even? n) (my-prod-iter (* b 2) (/ n 2) a))
+        (else (my-prod-iter b (- n 1) (+ a b)))))
+
+(define (even? x) (= (remainder x 2) 0))
+
+(my-prod 3 3)

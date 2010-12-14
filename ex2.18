@@ -1,0 +1,20 @@
+#lang racket
+
+(define (reverse lst)
+  (define (iter current next)
+    (if (null? next)
+        current
+        (iter (cons (car next) current) (cdr next))))
+  (iter null lst))
+
+
+(define (reverse-r items)
+  (if (null? items)
+      (list)
+      (append (reverse-r (cdr items)) (list(car items)))))
+
+;test
+(reverse (list 23 72 149 34))
+(reverse-r (list 23 72 149 34))
+(equal? (list 34 149 72 23) (reverse (list 23 72 149 34)))
+(equal? (list 149 72 23) (reverse (list 23 72 149)))

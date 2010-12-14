@@ -1,0 +1,13 @@
+#lang scheme
+
+(define (my-expt b n) (my-expt-iter b n 1))
+
+(define (my-expt-iter b n a)
+  (cond ((= n 0) a)
+        ((even? n) (my-expt-iter (* b b) (/ n 2) a))
+        (else (my-expt-iter b (- n 1) (* a b)))))
+
+(define (even? x) (= (remainder x 2) 0))
+
+
+(my-expt 3 3)

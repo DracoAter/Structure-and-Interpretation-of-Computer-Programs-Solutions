@@ -1,0 +1,19 @@
+#lang racket
+
+(define (square-list items)
+  (if (null? items)
+      null
+      (cons (sqr (car items)) (square-list (cdr items)))))
+
+(define (sqr-list items)
+  (map sqr items))
+
+(define (map proc items)
+  (if (null? items)
+      null
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
+;test
+(equal? (list 1 4 9 16) (square-list (list 1 2 3 4)))
+(equal? (list 1 4 9 16) (sqr-list (list 1 2 3 4)))
