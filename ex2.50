@@ -1,0 +1,46 @@
+#lang racket
+(require (planet "sicp.ss" ("soegaard" "sicp.plt" 2 1)))
+
+(define (xcor-vect vect)
+  (car vect))
+
+(define (ycor-vect vect)
+  (cdr vect))
+
+(define (sub-vect a b)
+  (make-vect (- (xcor-vect a) (xcor-vect b))
+             (- (ycor-vect a) (ycor-vect b))))
+
+(define (transform-painterr painter origin corner1 corner2)
+  (lambda (frame)
+    (let ((m (frame-coord-map frame)))
+      (let ((new-origin (m origin)))
+        (painter
+         (make-frame new-origin
+                     (sub-vect (m corner1) new-origin)
+                     (sub-vect (m corner2) new-origin)))))))
+
+
+(define (flip-hor painter)
+  (transform-painterr painter 
+                     (make-vect 1 0)
+                     (make-vect 0 0)
+                     (make-vect 1 1)))
+
+(define (turn180 painter)
+  (transform-painterr painter 
+                     (make-vect 1 1)
+                     (make-vect 0 1)
+                     (make-vect 1 0)))
+
+(define (turn270 painter)
+  (transform-painterr painter 
+                     (make-vect 0 1)
+                     (make-vect 0 0)
+                     (make-vect 1 1)))
+
+
+(paint einstein)
+(paint (flip-hor einstein))
+(paint (turn180 einstein))
+(paint (turn270 einstein))

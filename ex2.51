@@ -1,0 +1,55 @@
+#lang racket
+(require (planet "sicp.ss" ("soegaard" "sicp.plt" 2 1)))
+
+(define (xcor-vect vect)
+  (car vect))
+
+(define (ycor-vect vect)
+  (cdr vect))
+
+(define (sub-vect a b)
+  (make-vect (- (xcor-vect a) (xcor-vect b))
+             (- (ycor-vect a) (ycor-vect b))))
+
+(define (transform-painterr painter origin corner1 corner2)
+  (lambda (frame)
+    (let ((m (frame-coord-map frame)))
+      (let ((new-origin (m origin)))
+        (painter
+         (make-frame new-origin
+                     (sub-vect (m corner1) new-origin)
+                     (sub-vect (m corner2) new-origin)))))))
+
+(define (mybelow painter1 painter2)
+  (let ((split-point (make-vect 0.0 0.5)))
+    (let ((paint-bottom
+           (transform-painterr painter1
+                              (make-vect 0.0 0.0)
+                              (make-vect 1.0 0.0)
+                              split-point))
+          (paint-top
+           (transform-painterr painter2
+                              split-point
+                              (make-vect 1.0 0.5)
+                              (make-vect 0.0 1.0))))
+      (lambda (frame)
+        (paint-bottom frame)
+        (paint-top frame)))))
+
+(define (turn270 painter)
+  (transform-painterr painter 
+                     (make-vect 0 1)
+                     (make-vect 0 0)
+                     (make-vect 1 1)))
+
+(define (turn90 painter)
+  (transform-painterr painter 
+                     (make-vect 1 0)
+                     (make-vect 1 1)
+                     (make-vect 0 0)))
+
+(define (mybelow2 painter1 painter2)
+  (turn90 (beside (turn270 painter1) (turn270 painter2))))
+
+(paint (mybelow einstein (flip-vert einstein)))
+(paint (mybelow2 einstein (flip-vert einstein)))
