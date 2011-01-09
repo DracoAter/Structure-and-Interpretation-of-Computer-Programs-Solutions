@@ -1,4 +1,5 @@
 #lang racket
+(provide union-set)
 
 (define (adjoin-set x set)
   (cond ((null? set) (list x))
@@ -11,4 +12,4 @@
       set1
       (union-set (adjoin-set (car set2) set1) (cdr set2))))
 
-(union-set (list 1 2 3) (list 2 4 6))
+;(union-set (list 1 2 3) (list 2 4 6))

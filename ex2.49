@@ -1,2 +1,40 @@
 #lang racket
+(require (planet "sicp.ss" ("soegaard" "sicp.plt" 2 1)))
 
+(define (origin-frame frame)
+  (cadr frame))
+
+(define (edge1-frame frame)
+  (caddr frame))
+
+(define (edge2-frame frame)
+  (cadddr frame))
+
+(define (xcor-vect vect)
+  (car vect))
+
+(define (ycor-vect vect)
+  (cdr vect))
+
+(define (add-vect a b)
+  (make-vect (+ (xcor-vect a) (xcor-vect b))
+             (+ (ycor-vect a) (ycor-vect b))))
+
+
+(define a (make-vect 3 -5))
+(define b (make-vect -2 6))
+(define i (make-vect 3 1))
+(define f (make-frame i a b))
+
+(define (outline frame)
+  (segments->painter 
+    (list (make-segment (origin-frame f)
+                        (edge1-frame f))
+          (make-segment (origin-frame f)
+                        (edge2-frame f))
+          (make-segment (add-vect (origin-frame f) (edge1-frame f))
+                        (edge2-frame f))
+          (make-segment (add-vect (origin-frame f) (edge2-frame f))
+                        (edge1-frame f)))))
+
+(paint (outline f))

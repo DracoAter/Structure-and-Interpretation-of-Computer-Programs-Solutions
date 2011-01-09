@@ -1,5 +1,7 @@
 #lang racket
 
+(provide tree->list-2 entry left-branch right-branch make-tree)
+
 (define (entry tree) (car tree))
 (define (left-branch tree) (cadr tree))
 (define (right-branch tree) (caddr tree))
@@ -23,6 +25,7 @@
                                           result-list)))))
   (copy-to-list tree '()))
 
+#|
 (define a '(7 (3 (1 ()()) (5 ()())) (9 () (11 ()()))))
 (define b '(3 (1 ()()) (7 (5 ()()) (9 () (11 ()())))))
 (define c '(5 (3 (1()()) ()) (9 (7 ()()) (11 ()()))))
@@ -33,3 +36,4 @@
 (tree->list-2 a)
 (tree->list-2 b)
 (tree->list-2 c)
+|#

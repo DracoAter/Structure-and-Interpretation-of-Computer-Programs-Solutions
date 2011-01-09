@@ -1,4 +1,5 @@
 #lang racket
+(provide list->tree)
 
 (define (entry tree) (car tree))
 (define (left-branch tree) (cadr tree))
@@ -25,9 +26,11 @@
                 (cons (make-tree this-entry left-tree right-tree)
                       remaining-elts))))))))
 
+#|
 (partial-tree '(1) 1)
 (partial-tree '(1 3) 2)
 (partial-tree '(1 3 5) 3)
 (partial-tree '(1 3 5 7) 4)
 (partial-tree '(1 3 5 7 9) 5)
 (partial-tree '(1 3 5 7 9 11) 6)
+|#

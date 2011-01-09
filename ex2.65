@@ -1,11 +1,38 @@
 #lang racket
 
-(define (union-set-tree set1 set2)
-  (let ((list1 (tree->list-2 set1))
-        (list2 (tree->list-2 set2)))
+(require "ex2.64")
+(require "ex2.63")
+(require "ex2.62")
+
+(define (intersection-set set1 set2)
+  (if (or (null? set1) (null? set2))
+      '()
+      (let ((x1 (car set1)) (x2 (car set2)))
+        (cond ((= x1 x2)
+               (cons x1
+                     (intersection-set (cdr set1)
+                                       (cdr set2))))
+              ((< x1 x2)
+               (intersection-set (cdr set1) set2))
+              ((< x2 x1)
+               (intersection-set set1 (cdr set2)))))))
+
+(define (union-tree tree1 tree2)
+  (let ((list1 (tree->list-2 tree1))
+        (list2 (tree->list-2 tree2)))
     (list->tree (union-set list1 list2))))
 
-(define (intersection-set-tree set1 set2)
-  (let ((list1 (tree->list-2 set1))
-        (list2 (tree->list-2 set2)))
+(define (intersection-tree tree1 tree2)
+  (let ((list1 (tree->list-2 tree1))
+        (list2 (tree->list-2 tree2)))
     (list->tree (intersection-set list1 list2))))
+
+#|
+(define a '(7 (3 (1 ()()) (5 ()())) (9 () (11 ()()))))
+(define b '(2 (0 ()()) (6 (4 ()()) (8 () (10 ()())))))
+(define c '(25 (15 (5()()) ()) (45 (35 ()()) (55 ()()))))
+
+(union-tree a b)
+(intersection-tree a b)
+(intersection-tree a c)
+|#
