@@ -1,0 +1,19 @@
+#lang racket
+(require "ex2.63")
+
+(define (key entry) entry)
+
+(define (lookup given-key tree)
+  (cond ((null? tree) null)
+        ((equal? given-key (key (entry tree))) (entry tree))
+        ((< given-key (key (entry tree))) 
+         (lookup given-key (left-branch tree)))
+        (else (lookup given-key (right-branch tree)))))
+
+;#|
+(define a '(7 (3 (1 ()()) (5 ()())) (9 () (11 ()()))))
+
+(lookup 11 a)
+(lookup 10 a)
+(lookup 3 a)
+;|#
