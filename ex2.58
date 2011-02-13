@@ -1,4 +1,6 @@
 #lang racket
+(provide variable? same-variable? make-sum make-product
+         make-exponentiation)
 
 (define (variable? x) (symbol? x))
 (define (same-variable? v1 v2)
@@ -85,6 +87,7 @@
         (else
          (error "неизвестный тип выражения -- DERIV" exp))))
 
+#|
 (sum? '(x + 3)) ;-> #t
 (addend '(x + 3)) ;-> x
 (augend '(x + 3)) ;-> 3
@@ -98,3 +101,4 @@
 (deriv '(x + (3 * (x + (y + 2)))) 'x) ; -> 4
 
 (deriv '(x * (3 * 5)) 'x) ; -> 4
+|#

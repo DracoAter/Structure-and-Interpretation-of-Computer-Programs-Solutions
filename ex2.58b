@@ -1,4 +1,5 @@
 #lang racket
+(provide variable? same-variable?)
 
 (define (variable? x) (symbol? x))
 (define (same-variable? v1 v2)
@@ -95,7 +96,7 @@
         (else
          (error "неизвестный тип выражения -- DERIV" exp))))
 
-
+#|
 (sum? '((2 + 3) * 2 + (x + 2)))
 #t
 (sum? '((2 + 3) * 2 * (x + 2)))
@@ -113,3 +114,4 @@
 
 ""
 (deriv '(3 * x * 5) 'x) ; -> 15
+|#
